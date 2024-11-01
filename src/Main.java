@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -130,7 +127,7 @@ public class Main {
         String password = scan.nextLine();
 
         Customer customer = DB.get(ID);
-        if(customer != null) {
+        if(customer != null && customer.getPassword().equals(password)) {
             System.out.println("Login successful! Welcome, " + ID + "!");
             customerinterface(customer,admin);
         }else{
@@ -146,7 +143,7 @@ public class Main {
         System.out.print("Enter your password: ");
         String password = scan.nextLine();
 
-        if(ID==admin.getID() ){
+        if(ID==admin.getID() && password.equals(admin.getPassword()) ){
             System.out.println("Login successful! Welcome, " + ID + "!");
             handleadminmeny(admin);
 
@@ -316,7 +313,7 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         boolean running=true;
 
-        while(running){
+        while(running) {
             System.out.println("\n1. View All Items");
             System.out.println("2. Search for an Item");
             System.out.println("3. Filter by Category");
@@ -324,10 +321,23 @@ public class Main {
             System.out.println("5. Go back");
 
             System.out.println("What do you want to do ");
-            int input = scan.nextInt();
-            scan.nextLine();
 
-            switch (input){
+            int input = 0;
+
+            boolean validInput = false;
+            while(!validInput) {
+                try {
+                    input = scan.nextInt();
+                    scan.nextLine();
+                    validInput = true;
+                }catch (InputMismatchException e){
+                    System.out.println("Please enter a valid number.");
+                }
+            }
+
+
+
+            switch (input) {
                 case 1:
                     admin.printmenu();
                     break;
@@ -344,7 +354,7 @@ public class Main {
                 case 4:
                     System.out.print("SORTED ASCENDING(1) OR DESCENDING(0)  Enter 1/0 ");
                     int Ans = scan.nextInt();
-                    boolean val=Ans==1;
+                    boolean val = Ans == 1;
                     admin.SortbyPrice(val);
                     break;
 
@@ -353,7 +363,7 @@ public class Main {
                     break;
             }
 
-    }}
+        }}
 
     public static void cartinterface(Customer customer,AdminManage admin){
 
@@ -481,24 +491,24 @@ public class Main {
         System.out.print("Select an option: ");
         int choice = scan.nextInt();
         scan.nextLine();
-
-        switch (choice){
-            case 1:
-                menumanagement(admin);
-                break;
-            case 2:
-                ordermanagement(admin);
-                break;
-            case 3:
-                Reportgeneration(admin);
-                break;
-            case 4:
-                running = false;
-                break;
-            default:
-                System.out.println("Please choose one of the options");
+        while(running){
+            switch (choice){
+                case 1:
+                    menumanagement(admin);
+                    break;
+                case 2:
+                    ordermanagement(admin);
+                    break;
+                case 3:
+                    Reportgeneration(admin);
+                    break;
+                case 4:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Please choose one of the options");
+            }
         }
-
     }
 
     public static void menumanagement(AdminManage admin){

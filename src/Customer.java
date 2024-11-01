@@ -5,12 +5,15 @@ public class Customer extends User{
     private Map<Menu,Integer> Itemsbuying;
     private Map<Integer,Orders> PreviousHistory;
 
-    private static int Order_IDCOunt = 0;
+//    private static int Order_IDCOunt = 1;
+
+    public OrderID orderID;
 
     public Customer(int ID, String Name, String Password) {
         super(ID, Name, Password);
         Itemsbuying = new HashMap<>();
         PreviousHistory = new HashMap<>();
+        orderID = new OrderID();
     }
 
 
@@ -112,8 +115,8 @@ public class Customer extends User{
 
 
             if(deets!=null && address!=null){
-                int orderID=Order_IDCOunt++;
-
+//                int orderID=Order_IDCOunt++;
+                int orderID=this.orderID.getNextOrderID();
                 Orders Order = new Orders(orderID,this.getName(),new HashMap<>(Itemsbuying),"RECIEVED");
                 if(SpecialRequest!=null){
                     Order.setSpecialRequest(SpecialRequest);
@@ -204,13 +207,7 @@ public class Customer extends User{
         }
 
     }
-    public static int getOrder_IDCOunt() {
-        return Order_IDCOunt;
-    }
 
-    public static void setOrder_IDCOunt(int order_IDCOunt) {
-        Order_IDCOunt = order_IDCOunt;
-    }
 
 
 

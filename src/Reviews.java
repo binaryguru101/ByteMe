@@ -51,7 +51,7 @@ public class Reviews<T> {
 
     @Override
     public String toString() {
-        return "Reviews{" +
+        return
                 "item=" + item +
                 ", rating=" + rating +
                 ", rev='" + rev + '\''
