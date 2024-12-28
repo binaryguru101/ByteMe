@@ -5,17 +5,17 @@ public class Orders {
 
     private int ID;
     private String Name;
-    private Map<Menu, Integer> OrderedItems; // Map to hold Menu items and their quantities
-    private String Status;
+    private Map<Menu, Integer> OrderedItems;     private String Status;
     private String SpecialRequest;
+
 
     public Orders(int ID, String name, Map<Menu, Integer> orderedItems, String status) {
         this.ID = ID;
         Name = name;
-        this.OrderedItems = orderedItems != null ? orderedItems : new HashMap<>(); // Initialize map if null
-        this.Status = (status != null && !status.isEmpty()) ? status : "RECEIVED"; // Default status if null or empty
-        this.SpecialRequest = "";
+        this.OrderedItems = orderedItems != null ? orderedItems : new HashMap<>();         this.Status = (status != null && !status.isEmpty()) ? status : "RECEIVED";         this.SpecialRequest = "";
+
     }
+
 
     public void ViewSpecialRequest() {
         System.out.println("ID: " + this.ID+" Special Request "+this.SpecialRequest);
@@ -31,8 +31,7 @@ public class Orders {
     }
 
 
-    // Getters and Setters
-    public int getID() {
+        public int getID() {
         return ID;
     }
 
@@ -58,8 +57,7 @@ public class Orders {
 
 
     public void setOrderedItems(Map<Menu, Integer> orderedItems) {
-        this.OrderedItems = orderedItems != null ? orderedItems : new HashMap<>(); // Handle null input
-    }
+        this.OrderedItems = orderedItems != null ? orderedItems : new HashMap<>();     }
 
 
     public String getStatus() {
@@ -76,6 +74,23 @@ public class Orders {
     public void setSpecialRequest(String specialRequest) {
         SpecialRequest = specialRequest;
     }
+
+
+
+    public String toHistoryString() {
+        StringBuilder orderDetails = new StringBuilder();
+        orderDetails.append("Order ID ").append(ID)
+                .append(" Name ").append(Name)
+                .append(" Status ").append(Status)
+                .append(" Items ");
+
+                for (Map.Entry<Menu, Integer> entry : OrderedItems.entrySet()) {
+            orderDetails.append(entry.getKey().getName()).append(" x").append(entry.getValue()).append(", ");
+        }
+
+        return orderDetails.toString();
+    }
+
 
     @Override
     public String toString() {

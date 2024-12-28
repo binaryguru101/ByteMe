@@ -1,3 +1,7 @@
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+
 import java.util.*;
 
 public class AdminManage extends User implements MenuRecord,OrderRecord{
@@ -9,6 +13,8 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
     private Map<Orders,Double>priceperorder;
 
     private Map<Integer,Orders> ALLORDERS;
+
+
 
     public AdminManage(int ID, String Name, String Password) {
         super(ID, Name, Password);
@@ -84,6 +90,37 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
 
     }
 
+    public void viewPendingOrdersGUI(AdminManage admin, VBox layout) {
+        layout.getChildren().clear();
+
+        Label titleLabel = new Label("Pending Orders:");
+        layout.getChildren().add(titleLabel);
+
+        for (Map.Entry<Integer, Orders> entry : PendingOrders.entrySet()) {
+            Integer orderID = entry.getKey();
+            Orders order = entry.getValue();
+
+            
+            Label orderLabel = new Label("Order ID: " + orderID + " - " + order.toString());
+            layout.getChildren().add(orderLabel);
+        }
+    }
+
+
+
+//    public void viewpending_PRIORITY(){
+//        for(Orders Order : PendingOrders.values()){
+//            if(Objects.equals(Order., "VIP")){
+//                System.out.println(Order);
+//            }
+//        }
+//        for(Orders Order : PendingOrders.values()){
+//            if(Objects.equals(Order.getPriority(), "Customer")){
+//                System.out.println(Order);
+//            }
+//        }
+//    }
+
 
     @Override
     public void UpdateOrderStatus(int OrderID, String status) {
@@ -138,7 +175,7 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
 
     @Override
     public void processRefund(int OrderID) {
-//        Orders Ordering = CompletedOrders.get(OrderID) ;
+
         Orders Ordering = ALLORDERS.get(OrderID) ;
         if (Ordering == null) {
             System.out.println("ERROR INVALID ORDERS");
@@ -187,11 +224,49 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
         }
     }
 
+    public String GUISearchForanItem(String input){
+        boolean found = false;
+        for(Menu item : AvaliableMenu.values()){
+            if(item.getName().toLowerCase().contains(input.toLowerCase())){
+                System.out.println("ITEM FOUND ");
+                System.out.println(item);
+                String itemfound=
+                        "ID: " + item.getFoodid() +
+                                ", Name: " + item.getName() +
+                                ", Price: $" + item.getPrice() +
+                                ", Availability: " + item.getAvailiablity() +
+                                ", Is Available: " + item.isAvailable()
+
+                ;
+
+                found = true;
+                return itemfound;
+            }
+        }
+        String notfound = "ITEM NOT FOUND";
+        return notfound;
+    }
+
     public void FilterbyCategory(String input){
         System.out.println("Filtering by "+input);
         for(Menu item : AvaliableMenu.values()){
             if(item.getCategory().toLowerCase().contains(input.toLowerCase())){
                 System.out.println(item.getCategory()+" "+item.getFoodid()+" "+item.getPrice()+" "+item.getAvailiablity());
+            }
+        }
+    }
+
+    public void GUIFilterbyCategory(String input,VBox layout){
+        System.out.println("Filtering by "+input);
+        layout.getChildren().clear();
+        Label Filter = new Label("Filtering BY "+input);
+        layout.getChildren().add(Filter);
+        for(Menu item : AvaliableMenu.values()){
+            if(item.getCategory().toLowerCase().contains(input.toLowerCase())){
+
+                Label Items = new Label(item.getName()+" --> "+item.getCategory()+" "+item.getFoodid()+" "+item.getPrice()+" "+item.getAvailiablity());
+                layout.getChildren().add(Items);
+
             }
         }
     }
@@ -216,6 +291,41 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
        }
 
     }
+
+    public void GUISortbyPrice(boolean val,VBox layouy){
+
+        List<Map.Entry<Integer,Menu> > menulist = new ArrayList<>(AvaliableMenu.entrySet());
+
+        menulist.sort(Comparator.comparingDouble(entry->entry.getValue().getPrice()));
+
+        layouy.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().startsWith("SORTED ITEMS"));
+
+
+        Label Order=new Label("ORDER IS "+ (val?"ASCENDING":"DESCENDING"));
+
+        layouy.getChildren().add(Order);
+
+        if(val){
+            System.out.println("SORTED ITEMS BY PRICE ASCENDING ");
+            for(Map.Entry<Integer,Menu> item : menulist){
+                System.out.println(item.getValue());
+                Label values = new Label((item.getValue().getName()+item.getValue().getPrice()));
+                layouy.getChildren().add(values);
+
+            }
+
+        }else{
+            System.out.println("SORTED ITEMS BY PRICE DESCENDING ");
+            for (int i = menulist.size() - 1; i >= 0; i--) {
+                System.out.println(menulist.get(i).getValue());
+                Label values = new Label(menulist.get(i).getValue().getName()+menulist.get(i).getValue().getPrice());
+                layouy.getChildren().add(values);
+            }
+        }
+
+    }
+
+
 
     public Menu Max_item(){
         Map<Menu,Integer> all_items_sold= new HashMap<>();
@@ -244,7 +354,7 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
         return max_item;
     }
 
-    //getter setter
+    
 
 
     public Map<Integer, Orders> getPendingOrders() {
@@ -257,8 +367,8 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
         ALLORDERS.put(ID,orderspending);
 
         double Revenue = orderspending.totalPrice();
-//        System.out.println(Revenue);
-//        System.out.println("PREVIOUS REV"+TotalRevenue);
+
+
 
         Sales RevenueRecord = new Sales(new Date(),getName(),orderspending.getOrderedItems(),orderspending.getID());
         totalRevenue.add(RevenueRecord);
@@ -266,9 +376,9 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
 
 
 
-//        System.out.println("Revenue: "+TotalRevenue);
 
-//        priceperorder.put(order,revenue.getRevenue());
+
+
         System.out.print("ADDED ITEM SUCCESSFULLY");
 
 
@@ -304,6 +414,46 @@ public class AdminManage extends User implements MenuRecord,OrderRecord{
             System.out.println("Nothing to show");
         }
     }
+
+
+    public String printRevenueGUI() {
+        StringBuilder report = new StringBuilder();
+
+        report.append("Total Revenue: ").append(totalRevenue).append("\n");
+        report.append("__________________________________________________\n");
+        report.append("Most Popular Food Currently:\n");
+
+        Menu mostPopularFood = Max_item();
+        if (mostPopularFood != null) {
+            report.append(mostPopularFood.getName()).append("\n");
+        } else {
+            report.append("Nothing to show\n");
+        }
+
+        return report.toString();  
+    }
+
+    public void showSpecialRequestsGUI(AdminManage admin, VBox layout) {
+        layout.getChildren().clear();
+
+        TextArea specialRequestsArea = new TextArea();
+        specialRequestsArea.setEditable(false);
+        specialRequestsArea.setPrefSize(600, 400);
+
+        
+        StringBuilder requestsList = new StringBuilder();
+        for (Orders order : admin.getPendingOrders().values()) {
+            String specialRequest = order.getSpecialRequest();
+            if (specialRequest != null && !specialRequest.trim().isEmpty()) {
+                requestsList.append("Order ID: ").append(order.getID())
+                        .append(" - Request: ").append(specialRequest).append("\n");
+            }
+        }
+        specialRequestsArea.setText(requestsList.toString());
+
+        layout.getChildren().addAll(new Label("Special Requests:"), specialRequestsArea);
+    }
+
     public void setAvaliableMenu(Map<Integer, Menu> avaliableMenu) {
         AvaliableMenu = avaliableMenu;
     }

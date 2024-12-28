@@ -1,17 +1,21 @@
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.VBox;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Menu {
-    //list of foods
-    //price
-    //quantity
+    
+    
+    
     private int foodid;
     private double price;
     private String name;
     private int Availiablity;
     private boolean available=true;
     private String Category;
-//    private String Review;
+
     private List<Reviews<Menu>> Reviews;
 
 
@@ -34,6 +38,40 @@ public class Menu {
     public void ViewReviews(){
         System.out.println(this.Reviews);
     }
+    public void GUIViewReviews(VBox layout) {
+        if (Reviews.isEmpty()) {
+            
+            Label noReviewsLabel = new Label("No reviews available for this item.");
+            layout.getChildren().add(noReviewsLabel);
+        } else {
+            
+            for (Reviews<Menu> review : Reviews) {
+                
+                VBox reviewBox = new VBox(5); 
+                reviewBox.getStyleClass().add("review-box");
+
+
+                
+                Label ratingLabel = new Label("Rating: " + review.getRating() + "/5");
+                ratingLabel.getStyleClass().add("review-rating");
+
+                
+                Label reviewTextLabel = new Label(review.getRev());
+                reviewTextLabel.setWrapText(true);
+                reviewTextLabel.getStyleClass().add("review-text");
+
+                
+                reviewBox.getChildren().addAll(ratingLabel, reviewTextLabel);
+
+                
+                Separator separator = new Separator();
+
+                
+                layout.getChildren().addAll(reviewBox, separator);
+            }
+        }
+    }
+
 
 
 

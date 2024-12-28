@@ -1,0 +1,54 @@
+.root {
+    -fx-background-color: #e3f2fd;
+    -fx-alignment: top-left;
+    -fx-padding: 20px;
+}
+
+.button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #101010;
+    -fx-font-size: 16px;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 12 24;
+    -fx-effect: innershadow(gaussian, rgba(181, 5, 5, 0.2), 5, 0.0, 2, 2);
+    -fx-transition: background-color 0.3s ease;
+    -fx-min-width: 200px;
+    -fx-pref-height: 50px;
+}
+
+.button:hover {
+    -fx-background-color: #388e3c;
+}
+
+.vbox {
+    -fx-background-color: white;
+    -fx-border-color: #aebaae;
+    -fx-border-width: 2px;
+    -fx-border-radius: 15px;
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: top-left;
+    -fx-min-width: 400px;
+    -fx-max-width: 600px;
+}
+
+.label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.text-field {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px;
+    -fx-font-size: 16px;
+}
+
+.text-field:focused {
+    -fx-border-color: #2b302b;
+    -fx-background-color: #e8f5e9;
+}

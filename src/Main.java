@@ -1,9 +1,9 @@
-import javax.swing.*;
+
 import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class Main  {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -32,7 +32,7 @@ public class Main {
 
         AdminManage admin1= new AdminManage(1,"Hu","GOTCHA");
 
-        Customer customer = new Customer(102,"ujj","gotcha");
+//        Customer customer = new Customer(102,"ujj","gotcha");
 
         Map <Menu, Integer> orderItems2 = new HashMap<>();
 
@@ -111,14 +111,14 @@ public class Main {
         System.out.print("Enter your password: ");
         String password = scan.nextLine();
 
-        Customer customer = new Customer(id,name,password);
+        Customer customer = new Customer(id,name,password,new HashMap<>());
         DB.put(id, customer);
 
 
         System.out.println("Signup successful! Welcome, " + name + "!");
     }
 
-    public static void customerloginpage(Scanner scan,Map<Integer, Customer> DB,AdminManage admin) {
+    public static String customerloginpage(Scanner scan,Map<Integer, Customer> DB,AdminManage admin) {
         System.out.print("Enter your ID: ");
         int ID = scan.nextInt();
         scan.nextLine();
@@ -130,8 +130,31 @@ public class Main {
         if(customer != null && customer.getPassword().equals(password)) {
             System.out.println("Login successful! Welcome, " + ID + "!");
             customerinterface(customer,admin);
+//            return ("Login successful! Welcome, " + ID + "!");
+            return ("Logged in");
         }else{
             System.out.println("Login failed!");
+            return ("Login failed");
+        }
+    }
+
+    public static String mockcustomerloginpage(Scanner scan,Map<Integer, Customer> DB,AdminManage admin) {
+        System.out.print("Enter your ID: ");
+        int ID = scan.nextInt();
+        scan.nextLine();
+
+        System.out.print("Enter your password: ");
+        String password = scan.nextLine();
+
+        Customer customer = DB.get(ID);
+        if(customer != null && customer.getPassword().equals(password)) {
+            System.out.println("Login successful! Welcome, " + ID + "!");
+//            customerinterface(customer,admin);
+//            return ("Login successful! Welcome, " + ID + "!");
+            return ("Logged in");
+        }else{
+            System.out.println("Login failed!");
+            return ("Login failed");
         }
     }
 
@@ -387,10 +410,6 @@ public class Main {
 
             switch (choice) {
                 case 1:
-
-                    boolean conti = true;
-                    while (conti) {
-
                         System.out.print("What do you want to add to cart: ");
                         String name = scan.nextLine();
 
@@ -401,17 +420,11 @@ public class Main {
                                 break;
                             }
                         }
-                        customer.addItem(toadd);
-
-                        System.out.print("Do you want to add more items ");
-                        String ans = scan.nextLine();
-
-                        if (ans.equalsIgnoreCase("no")) {
-                            conti = false;
-
+                        if(toadd!=null){
+                            customer.addItem(toadd);
+                        }else{
+                            System.out.print("ITEM IS NOT AVALIABLE");
                         }
-
-                    }
 
 
                     break;
